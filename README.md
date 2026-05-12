@@ -1,5 +1,3 @@
-# TP Codesign SDRAM — Synthèse du tutoriel Qsys / Avalon-MM
-
 ## Objectif
 
 Ce TP consiste à comprendre comment intégrer un composant matériel personnalisé dans un système **Nios II / Qsys** sur carte **DE1**.  
