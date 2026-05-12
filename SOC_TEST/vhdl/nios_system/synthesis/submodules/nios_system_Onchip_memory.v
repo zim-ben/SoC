@@ -1,4 +1,4 @@
-//Legal Notice: (C)2013 Altera Corporation. All rights reserved.  Your
+//Legal Notice: (C)2026 Altera Corporation. All rights reserved.  Your
 //use of Altera Corporation's design tools, logic functions and other
 //software and tools, and its AMPP partner logic functions, and any
 //output files any of the foregoing (including device programming or
@@ -32,6 +32,8 @@ module nios_system_Onchip_memory (
                                     clken2,
                                     reset,
                                     reset2,
+                                    reset_req,
+                                    reset_req2,
                                     write,
                                     write2,
                                     writedata,
@@ -60,16 +62,22 @@ module nios_system_Onchip_memory (
   input            clken2;
   input            reset;
   input            reset2;
+  input            reset_req;
+  input            reset_req2;
   input            write;
   input            write2;
   input   [ 31: 0] writedata;
   input   [ 31: 0] writedata2;
 
+  wire             clocken0;
+  wire             clocken1;
   wire    [ 31: 0] readdata;
   wire    [ 31: 0] readdata2;
   wire             wren;
   wire             wren2;
   assign wren = chipselect & write;
+  assign clocken0 = clken & ~reset_req;
+  assign clocken1 = clken2 & ~reset_req2;
   assign wren2 = chipselect2 & write2;
   altsyncram the_altsyncram
     (
@@ -79,8 +87,8 @@ module nios_system_Onchip_memory (
       .byteena_b (byteenable2),
       .clock0 (clk),
       .clock1 (clk2),
-      .clocken0 (clken),
-      .clocken1 (clken2),
+      .clocken0 (clocken0),
+      .clocken1 (clocken1),
       .data_a (writedata),
       .data_b (writedata2),
       .q_a (readdata),
