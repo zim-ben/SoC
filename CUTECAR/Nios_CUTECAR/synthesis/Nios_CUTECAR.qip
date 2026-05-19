@@ -2,7 +2,7 @@ set_global_assignment -entity "Nios_CUTECAR" -library "Nios_CUTECAR" -name IP_TO
 set_global_assignment -entity "Nios_CUTECAR" -library "Nios_CUTECAR" -name IP_TOOL_VERSION "13.0sp1"
 set_global_assignment -entity "Nios_CUTECAR" -library "Nios_CUTECAR" -name IP_TOOL_ENV "Qsys"
 set_global_assignment -library "Nios_CUTECAR" -name SOPCINFO_FILE [file join $::quartus(qip_path) "../../Nios_CUTECAR.sopcinfo"]
-set_instance_assignment -entity "Nios_CUTECAR" -library "Nios_CUTECAR" -name SLD_INFO "QSYS_NAME Nios_CUTECAR HAS_SOPCINFO 1 GENERATION_ID 1779096180"
+set_instance_assignment -entity "Nios_CUTECAR" -library "Nios_CUTECAR" -name SLD_INFO "QSYS_NAME Nios_CUTECAR HAS_SOPCINFO 1 GENERATION_ID 1779186127"
 set_global_assignment -library "Nios_CUTECAR" -name MISC_FILE [file join $::quartus(qip_path) "../../Nios_CUTECAR.cmp"]
 set_global_assignment -name SYNTHESIS_ONLY_QIP ON
 set_global_assignment -library "Nios_CUTECAR" -name MISC_FILE [file join $::quartus(qip_path) "../../Nios_CUTECAR.qsys"]
@@ -24,6 +24,7 @@ set_global_assignment -library "Nios_CUTECAR" -name VERILOG_FILE [file join $::q
 set_global_assignment -library "Nios_CUTECAR" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_reset_synchronizer.v"]
 set_global_assignment -library "Nios_CUTECAR" -name SDC_FILE [file join $::quartus(qip_path) "submodules/altera_reset_controller.sdc"]
 set_global_assignment -library "Nios_CUTECAR" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_merlin_burst_adapter.sv"]
+set_global_assignment -library "Nios_CUTECAR" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "submodules/Nios_CUTECAR_id_router_006.sv"]
 set_global_assignment -library "Nios_CUTECAR" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "submodules/Nios_CUTECAR_id_router_003.sv"]
 set_global_assignment -library "Nios_CUTECAR" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "submodules/Nios_CUTECAR_id_router_002.sv"]
 set_global_assignment -library "Nios_CUTECAR" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "submodules/Nios_CUTECAR_id_router.sv"]
@@ -36,6 +37,9 @@ set_global_assignment -library "Nios_CUTECAR" -name SYSTEMVERILOG_FILE [file joi
 set_global_assignment -library "Nios_CUTECAR" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "submodules/altera_merlin_master_translator.sv"]
 set_global_assignment -library "Nios_CUTECAR" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/PWM_generation.vhd"]
 set_global_assignment -library "Nios_CUTECAR" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/PWM_generation_avalon_interface.vhd"]
+set_global_assignment -library "Nios_CUTECAR" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/capteurs_sol_seuil.vhd"]
+set_global_assignment -library "Nios_CUTECAR" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/capteurs_sol_seuil_avalon_interface.vhd"]
+set_global_assignment -library "Nios_CUTECAR" -name VHDL_FILE [file join $::quartus(qip_path) "submodules/pll_2freqs.vhd"]
 set_global_assignment -library "Nios_CUTECAR" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/Nios_CUTECAR_clocks.v"]
 set_global_assignment -library "Nios_CUTECAR" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/Nios_CUTECAR_sdram.v"]
 set_global_assignment -library "Nios_CUTECAR" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/Nios_CUTECAR_jtag_uart.v"]
@@ -87,6 +91,9 @@ set_global_assignment -entity "altera_reset_controller" -library "Nios_CUTECAR" 
 set_global_assignment -entity "altera_merlin_burst_adapter" -library "Nios_CUTECAR" -name IP_TOOL_NAME "altera_merlin_burst_adapter"
 set_global_assignment -entity "altera_merlin_burst_adapter" -library "Nios_CUTECAR" -name IP_TOOL_VERSION "13.0"
 set_global_assignment -entity "altera_merlin_burst_adapter" -library "Nios_CUTECAR" -name IP_TOOL_ENV "Qsys"
+set_global_assignment -entity "Nios_CUTECAR_id_router_006" -library "Nios_CUTECAR" -name IP_TOOL_NAME "altera_merlin_router"
+set_global_assignment -entity "Nios_CUTECAR_id_router_006" -library "Nios_CUTECAR" -name IP_TOOL_VERSION "13.0"
+set_global_assignment -entity "Nios_CUTECAR_id_router_006" -library "Nios_CUTECAR" -name IP_TOOL_ENV "Qsys"
 set_global_assignment -entity "Nios_CUTECAR_id_router_003" -library "Nios_CUTECAR" -name IP_TOOL_NAME "altera_merlin_router"
 set_global_assignment -entity "Nios_CUTECAR_id_router_003" -library "Nios_CUTECAR" -name IP_TOOL_VERSION "13.0"
 set_global_assignment -entity "Nios_CUTECAR_id_router_003" -library "Nios_CUTECAR" -name IP_TOOL_ENV "Qsys"

@@ -1,4 +1,15 @@
 
+State Machine - |Top_CUTECAR|Nios_CUTECAR:u0|capteurs_sol_seuil_avalon_interface:capteurs_sol_seuil_avalon_0|capteurs_sol_seuil:u_capteurs|State
+Name State.S7 State.S6 State.S5 State.S4 State.S3 State.S2 State.S1 State.S0 
+State.S0 0 0 0 0 0 0 0 0 
+State.S1 0 0 0 0 0 0 1 1 
+State.S2 0 0 0 0 0 1 0 1 
+State.S3 0 0 0 0 1 0 0 1 
+State.S4 0 0 0 1 0 0 0 1 
+State.S5 0 0 1 0 0 0 0 1 
+State.S6 0 1 0 0 0 0 0 1 
+State.S7 1 0 0 0 0 0 0 1 
+
 State Machine - |Top_CUTECAR|Nios_CUTECAR:u0|Nios_CUTECAR_sdram:sdram|m_next
 Name m_next.010000000 m_next.000010000 m_next.000001000 m_next.000000001 
 m_next.000000001 0 0 0 0 
