@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>19 mai 2026 12:25:11</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1779186311783</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>20 mai 2026 13:54:59</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1779278099134</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\mbenka1\Documents\TP_SoC\SoC\CUTECAR\Software_test\BSP</BspGeneratedLocation>
         <BspSettingsFile>C:\Users\mbenka1\Documents\TP_SoC\SoC\CUTECAR\Software_test\BSP\settings.bsp</BspSettingsFile>
         <SopcDesignFile>C:\Users\mbenka1\Documents\TP_SoC\SoC\CUTECAR\Nios_CUTECAR.sopcinfo</SopcDesignFile>

@@ -1,69 +1,140 @@
+#include <stdint.h>
 #include <stdio.h>
 #include "system.h"
 #include "io.h"
-#include "unistd.h"
 
-/* Sensor registers */
-#define REG_READY_VECT  0x00
-#define REG_NIVEAU      0x01
+/* ============================================================
+   REGISTRES CAPTEURS
+   ============================================================ */
+#define REG_READY_VECT   0x00
+#define REG_NIVEAU       0x01
 
-/* PWM registers */
-#define PWM_RIGHT        0x00
-#define PWM_LEFT         0x04
+/* ============================================================
+   REGISTRES PWM
+   ============================================================ */
+#define PWM_RIGHT         0x00
+#define PWM_LEFT          0x04
 
-/* PWM bits */
-#define GO_BIT           13
-#define DIR_BIT          12
+/* ============================================================
+   PARAMETRES PWM
+   ============================================================ */
+#define PWM_GO            (1 << 13)
+#define PWM_DIR           (1 << 12)
 
-/* Motor direction */
-#define RIGHT_FORWARD    0
-#define LEFT_FORWARD     1
+#define FORWARD           0
+#define BACKWARD          1
 
-/* Tuning */
-#define THRESHOLD        0x6C
+/* Directions physiques adaptées à ton robot */
+#define RIGHT_FORWARD_DIR 0
+#define RIGHT_BACKWARD_DIR 1
 
-/* Speeds = DUTY only, not full command */
-#define SPEED_SLOW       0x0800   /* min to move: full command right = 0x28C0 */
-#define SPEED_NORMAL     0x08A0
-#define SPEED_FAST       0x0A00
-#define SPEED_MAX        0x0A00   /* 3125 decimal */
+#define LEFT_FORWARD_DIR  1
+#define LEFT_BACKWARD_DIR 0
+
+/* Duty uniquement, pas commande complète */
+#define SPEED_MIN         0x08C0
+#define BASE_SPEED        0x08FF
+#define SEARCH_SPEED      0x08C0
+#define SPEED_MAX         0x0935
+
+/* ============================================================
+   PID simple
+   ============================================================ */
+#define KP                50
+#define KD                5
+
+/* ============================================================
+   SEUIL CAPTEUR
+   ============================================================ */
+#define NIVEAU            0x6C
 
 
-unsigned int pwm_cmd(unsigned int go, unsigned int dir, unsigned int duty)
+void delay_ms(uint32_t ms)
 {
-    if (duty > 3125)
-        duty = 3125;
+    volatile uint32_t i;
 
-    return ((go & 1) << GO_BIT) |
-           ((dir & 1) << DIR_BIT) |
-           (duty & 0x0FFF);
+    while (ms > 0)
+    {
+        for (i = 0; i < 5000; i++);
+        ms--;
+    }
 }
 
 
-void motors_stop(void)
+uint32_t pwm_cmd(int dir_bit, uint32_t speed)
+{
+    if (speed > SPEED_MAX)
+        speed = SPEED_MAX;
+
+    return PWM_GO | (dir_bit ? PWM_DIR : 0) | (speed & 0x0FFF);
+}
+
+
+void set_moteur_droit(int physical_dir, uint32_t speed)
+{
+    int dir_bit;
+
+    if (physical_dir == FORWARD)
+        dir_bit = RIGHT_FORWARD_DIR;
+    else
+        dir_bit = RIGHT_BACKWARD_DIR;
+
+    IOWR_32DIRECT(
+        PWM_GENERATION_AVALON_INTERFACE_0_BASE,
+        PWM_RIGHT,
+        pwm_cmd(dir_bit, speed)
+    );
+}
+
+
+void set_moteur_gauche(int physical_dir, uint32_t speed)
+{
+    int dir_bit;
+
+    if (physical_dir == FORWARD)
+        dir_bit = LEFT_FORWARD_DIR;
+    else
+        dir_bit = LEFT_BACKWARD_DIR;
+
+    IOWR_32DIRECT(
+        PWM_GENERATION_AVALON_INTERFACE_0_BASE,
+        PWM_LEFT,
+        pwm_cmd(dir_bit, speed)
+    );
+}
+
+
+void stop_moteurs(void)
 {
     IOWR_32DIRECT(PWM_GENERATION_AVALON_INTERFACE_0_BASE, PWM_RIGHT, 0x00000000);
     IOWR_32DIRECT(PWM_GENERATION_AVALON_INTERFACE_0_BASE, PWM_LEFT,  0x00000000);
 }
 
 
-void motors_forward(unsigned int right_speed, unsigned int left_speed)
+/* Pivot droite : roue droite arrière, roue gauche avant */
+void chercher_droite(void)
 {
-    IOWR_32DIRECT(
-        PWM_GENERATION_AVALON_INTERFACE_0_BASE,
-        PWM_RIGHT,
-        pwm_cmd(1, RIGHT_FORWARD, right_speed)
-    );
-
-    IOWR_32DIRECT(
-        PWM_GENERATION_AVALON_INTERFACE_0_BASE,
-        PWM_LEFT,
-        pwm_cmd(1, LEFT_FORWARD, left_speed)
-    );
+    set_moteur_droit(BACKWARD, SEARCH_SPEED);
+    set_moteur_gauche(FORWARD,  SEARCH_SPEED);
 }
 
 
-void print_vect(unsigned char vect)
+/* Pivot gauche : roue droite avant, roue gauche arrière */
+void chercher_gauche(void)
+{
+    set_moteur_droit(FORWARD,  SEARCH_SPEED);
+    set_moteur_gauche(BACKWARD, SEARCH_SPEED);
+}
+
+
+void avancer(uint32_t right_speed, uint32_t left_speed)
+{
+    set_moteur_droit(FORWARD, right_speed);
+    set_moteur_gauche(FORWARD, left_speed);
+}
+
+
+void print_vect(uint8_t vect)
 {
     int i;
 
@@ -77,59 +148,120 @@ void print_vect(unsigned char vect)
 }
 
 
+uint8_t read_vect_capt(void)
+{
+    uint8_t ready_vect;
+    uint8_t vect;
+
+    ready_vect = IORD_8DIRECT(
+        CAPTEURS_SOL_SEUIL_AVALON_0_BASE,
+        REG_READY_VECT
+    );
+
+    vect = ready_vect & 0x7F;
+
+    return vect;
+}
+
+
 int main(void)
 {
-    unsigned char ready_vect;
-    unsigned char ready;
-    unsigned char vect;
+    uint8_t vect_capt;
 
-    printf("CUTECAR simple line follower\n");
+    int sum_position;
+    int count;
+    int error;
+    int last_error;
+    int derivative;
+    int output;
+    int last_known_error;
 
-    /* Set threshold = 0x6C */
-    IOWR_8DIRECT(CAPTEURS_SOL_SEUIL_AVALON_0_BASE, REG_NIVEAU, THRESHOLD);
+    int left_speed;
+    int right_speed;
 
-    usleep(100000);
+    last_error = 0;
+    last_known_error = 0;
+
+    printf("CUTECAR line follower adapted\n");
+
+    IOWR_8DIRECT(
+        CAPTEURS_SOL_SEUIL_AVALON_0_BASE,
+        REG_NIVEAU,
+        NIVEAU
+    );
+
+    delay_ms(100);
 
     while (1)
     {
-        ready_vect = IORD_8DIRECT(CAPTEURS_SOL_SEUIL_AVALON_0_BASE, REG_READY_VECT);
+        delay_ms(5);
 
-        ready = (ready_vect & 0x80) >> 7;
-        vect  = ready_vect & 0x7F;
+        vect_capt = read_vect_capt();
 
         printf("vect = ");
-        print_vect(vect);
-        printf("  ready=%d\n", ready);
+        print_vect(vect_capt);
+        printf("\n");
 
-        if (ready == 0)
+        /* Ligne perdue */
+        if (vect_capt == 0x00)
         {
-            motors_stop();
-        }
-        else if (vect == 0x00)
-        {
-            motors_stop();
-        }
-        else if (vect & 0x08)
-        {
-            /* Center sensor: go straight */
-            motors_forward(SPEED_NORMAL, SPEED_NORMAL);
-        }
-        else if (vect & 0x07)
-        {
-            /* Line on left side: turn left */
-            motors_forward(SPEED_FAST, SPEED_SLOW);
-        }
-        else if (vect & 0x70)
-        {
-            /* Line on right side: turn right */
-            motors_forward(SPEED_FAST, SPEED_SLOW);
-        }
-        else
-        {
-            motors_stop();
+            last_error = 0;
+
+            if (last_known_error > 0)
+            {
+                chercher_gauche();
+            }
+            else if (last_known_error < 0)
+            {
+                chercher_droite();
+            }
+            else
+            {
+                stop_moteurs();
+            }
+
+            continue;
         }
 
-        usleep(50000);
+        /* Calcul position */
+        sum_position = 0;
+        count = 0;
+
+        if (vect_capt & (1 << 0)) { sum_position += -3; count++; }
+        if (vect_capt & (1 << 1)) { sum_position += -2; count++; }
+        if (vect_capt & (1 << 2)) { sum_position += -1; count++; }
+        if (vect_capt & (1 << 3)) { sum_position +=  0; count++; }
+        if (vect_capt & (1 << 4)) { sum_position +=  1; count++; }
+        if (vect_capt & (1 << 5)) { sum_position +=  2; count++; }
+        if (vect_capt & (1 << 6)) { sum_position +=  3; count++; }
+
+        error = sum_position / count;
+        last_known_error = error;
+
+        derivative = error - last_error;
+        output = (KP * error) + (KD * derivative);
+        last_error = error;
+
+        /*
+           Si le robot corrige dans le mauvais sens,
+           inverse les deux lignes suivantes.
+        */
+        left_speed  = BASE_SPEED - output;
+        right_speed = BASE_SPEED + output;
+
+        if (left_speed > SPEED_MAX)
+            left_speed = SPEED_MAX;
+
+        if (right_speed > SPEED_MAX)
+            right_speed = SPEED_MAX;
+
+        if (left_speed < SPEED_MIN)
+            left_speed = SPEED_MIN;
+
+        if (right_speed < SPEED_MIN)
+            right_speed = SPEED_MIN;
+
+        avancer((uint32_t)right_speed, (uint32_t)left_speed);
     }
 
     return 0;

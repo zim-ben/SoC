@@ -16,6 +16,6 @@
   </columns>
  </clocktable>
  <window width="1600" height="900" x="62" y="113" />
- <library expandedCategories="Library,Project/My Own IP Cores,Project" />
+ <library expandedCategories="Library,Project,Project/My Own IP Cores" />
  <hdlexample language="VHDL" />
 </preferences>

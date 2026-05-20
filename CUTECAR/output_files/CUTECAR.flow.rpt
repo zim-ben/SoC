@@ -1,5 +1,5 @@
 Flow report for CUTECAR
-Tue May 19 12:24:59 2026
+Wed May 20 13:53:06 2026
 Quartus II 32-bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Full Version
 
 
@@ -40,14 +40,14 @@ applicable agreement for further details.
 +---------------------------------------------------------------------------------------+
 ; Flow Summary                                                                          ;
 +------------------------------------+--------------------------------------------------+
-; Flow Status                        ; Successful - Tue May 19 12:24:59 2026            ;
+; Flow Status                        ; Successful - Wed May 20 13:53:05 2026            ;
 ; Quartus II 32-bit Version          ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Full Version ;
 ; Revision Name                      ; CUTECAR                                          ;
 ; Top-level Entity Name              ; Top_CUTECAR                                      ;
 ; Family                             ; Cyclone IV E                                     ;
 ; Device                             ; EP4CE22F17C6                                     ;
 ; Timing Models                      ; Final                                            ;
-; Total logic elements               ; 2,949 / 22,320 ( 13 % )                          ;
+; Total logic elements               ; 2,950 / 22,320 ( 13 % )                          ;
 ;     Total combinational functions  ; 2,616 / 22,320 ( 12 % )                          ;
 ;     Dedicated logic registers      ; 1,833 / 22,320 ( 8 % )                           ;
 ; Total registers                    ; 1902                                             ;
@@ -64,7 +64,7 @@ applicable agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 05/19/2026 12:22:50 ;
+; Start date & time ; 05/20/2026 13:50:46 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; CUTECAR             ;
 +-------------------+---------------------+
@@ -75,7 +75,7 @@ applicable agreement for further details.
 +-------------------------------------+---------------------------------------+---------------+--------------------+----------------+
 ; Assignment Name                     ; Value                                 ; Default Value ; Entity Name        ; Section Id     ;
 +-------------------------------------+---------------------------------------+---------------+--------------------+----------------+
-; COMPILER_SIGNATURE_ID               ; 251485283238846.177918617008444       ; --            ; --                 ; --             ;
+; COMPILER_SIGNATURE_ID               ; 154946507545760.177927784506300       ; --            ; --                 ; --             ;
 ; EDA_OUTPUT_DATA_FORMAT              ; Vhdl                                  ; --            ; --                 ; eda_simulation ;
 ; EDA_SIMULATION_TOOL                 ; ModelSim-Altera (VHDL)                ; <None>        ; --                 ; --             ;
 ; MAX_CORE_JUNCTION_TEMP              ; 85                                    ; --            ; --                 ; --             ;
@@ -99,12 +99,12 @@ applicable agreement for further details.
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name               ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis      ; 00:01:05     ; 1.0                     ; 510 MB              ; 00:00:32                           ;
-; Fitter                    ; 00:00:25     ; 2.0                     ; 783 MB              ; 00:00:17                           ;
-; Assembler                 ; 00:00:11     ; 1.0                     ; 404 MB              ; 00:00:02                           ;
-; TimeQuest Timing Analyzer ; 00:00:13     ; 2.7                     ; 480 MB              ; 00:00:04                           ;
-; EDA Netlist Writer        ; 00:00:14     ; 1.0                     ; 403 MB              ; 00:00:05                           ;
-; Total                     ; 00:02:08     ; --                      ; --                  ; 00:01:00                           ;
+; Analysis & Synthesis      ; 00:01:08     ; 1.0                     ; 508 MB              ; 00:00:36                           ;
+; Fitter                    ; 00:00:28     ; 1.5                     ; 743 MB              ; 00:00:23                           ;
+; Assembler                 ; 00:00:12     ; 1.0                     ; 400 MB              ; 00:00:03                           ;
+; TimeQuest Timing Analyzer ; 00:00:15     ; 1.0                     ; 472 MB              ; 00:00:06                           ;
+; EDA Netlist Writer        ; 00:00:14     ; 1.0                     ; 390 MB              ; 00:00:06                           ;
+; Total                     ; 00:02:17     ; --                      ; --                  ; 00:01:14                           ;
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
@@ -113,11 +113,11 @@ applicable agreement for further details.
 +---------------------------+------------------+-----------+------------+----------------+
 ; Module Name               ; Machine Hostname ; OS Name   ; OS Version ; Processor type ;
 +---------------------------+------------------+-----------+------------+----------------+
-; Analysis & Synthesis      ; a-201577         ; Windows 7 ; 6.2        ; x86_64         ;
-; Fitter                    ; a-201577         ; Windows 7 ; 6.2        ; x86_64         ;
-; Assembler                 ; a-201577         ; Windows 7 ; 6.2        ; x86_64         ;
-; TimeQuest Timing Analyzer ; a-201577         ; Windows 7 ; 6.2        ; x86_64         ;
-; EDA Netlist Writer        ; a-201577         ; Windows 7 ; 6.2        ; x86_64         ;
+; Analysis & Synthesis      ; a-137151         ; Windows 7 ; 6.2        ; x86_64         ;
+; Fitter                    ; a-137151         ; Windows 7 ; 6.2        ; x86_64         ;
+; Assembler                 ; a-137151         ; Windows 7 ; 6.2        ; x86_64         ;
+; TimeQuest Timing Analyzer ; a-137151         ; Windows 7 ; 6.2        ; x86_64         ;
+; EDA Netlist Writer        ; a-137151         ; Windows 7 ; 6.2        ; x86_64         ;
 +---------------------------+------------------+-----------+------------+----------------+
 
 

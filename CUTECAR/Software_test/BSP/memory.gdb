@@ -3,7 +3,7 @@
 # Machine generated for CPU 'nios2_qsys_0' in SOPC Builder design 'Nios_CUTECAR'
 # SOPC Builder design path: C:/Users/mbenka1/Documents/TP_SoC/SoC/CUTECAR/Nios_CUTECAR.sopcinfo
 #
-# Generated: Tue May 19 12:04:45 CEST 2026
+# Generated: Wed May 20 13:55:01 CEST 2026
 
 # DO NOT MODIFY THIS FILE
 #
